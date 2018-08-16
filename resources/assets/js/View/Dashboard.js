@@ -5,6 +5,7 @@ import React, { Component } from 'react';
     ReferenceDot, Tooltip, CartesianGrid, Legend, Brush, ErrorBar, AreaChart, Area,
     Label, LabelList } from 'recharts';
 import SignOut from "./SignOut";
+import XLSX from 'xlsx' 
 
 var signOut;
 var $this;
@@ -21,6 +22,29 @@ class Dashboard extends Component {
         componentDidMount() {
             this.fetchData();
         }
+        export(){
+            axios.get(config.baseurl+"dashboard")
+            .then(response => {
+                let empSalary = response.data.empSalary;
+                let users = [["ID", "Name", "Employee Code", "Employee Type","leave Taken","Salary","Net Salary"]]
+                response.data.employees.forEach((employee) => {
+                let salary = empSalary[employee.emp_code];
+                let userArray = [employee.id, employee.name, employee.emp_code, employee.emp_type_name,salary.taken_leave,employee.salary,salary.net_salary]
+                users.push(userArray)
+                })
+                const wb = XLSX.utils.book_new()
+                const wsAll = XLSX.utils.aoa_to_sheet(users)
+                    XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
+                    XLSX.writeFile(wb, "attendance.xlsx")
+                
+            })
+            .catch(function (error) {
+                
+                
+            })
+            
+    
+          }
         fetchData(){
             axios.get(config.baseurl+"dashboard")
             .then(response => {
@@ -51,9 +75,14 @@ class Dashboard extends Component {
 
             <div className="col-lg-12">
                 <div className="box">
-                    <div className="col-lg-10">
+                    <div className="col-lg-9">
                         <h3 className="text-primary">Dashboard</h3>
                     </div>
+                    <div className="col-lg-1">
+                                        <div id ="dataTable_filter" className="dataTables_filter">
+                                            <button onClick={() => this.export()} id="presBtn" className="btn btn-primary">Export</button>
+                                        </div>
+                            </div>
                     <div className="row">
                     <div className="col-sm-12">
                         <table id="dataTable" className="table table-bordered table-condensed table-hover table-striped">

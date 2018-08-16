@@ -89,5 +89,26 @@ https://github.com/tymondesigns/jwt-auth/wiki/Installation
 - npm install & composer install & composer dump-autoload
 - php artisan migrate:refresh --seed
 
+- php artisan serve
+- npm run watch
 - salary
 - checkbox select
+
+----- To Excel Export in React ----------
+- npm install xlsx --save
+
+- In component
+1. import XLSX from 'xlsx'
+2. let empSalary = response.data.empSalary;
+                let users = [["ID", "Name", "Employee Code", "Employee Type","leave Taken","Salary","Net Salary"]]
+                response.data.employees.forEach((employee) => {
+                let salary = empSalary[employee.emp_code];
+                let userArray = [employee.id, employee.name, employee.emp_code, employee.emp_type_name,salary.taken_leave,employee.salary,salary.net_salary]
+                users.push(userArray)
+                })
+                const wb = XLSX.utils.book_new()
+                const wsAll = XLSX.utils.aoa_to_sheet(users)
+                    XLSX.utils.book_append_sheet(wb, wsAll, "All Users")
+                    XLSX.writeFile(wb, "attendance.xlsx")
+https://medium.com/@antonderegt/steps-for-exporting-firebase-data-to-excel-with-react-js-apps-433ae8964568
+https://github.com/SheetJS/js-xlsx/tree/master/demos/react
