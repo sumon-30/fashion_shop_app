@@ -27,7 +27,7 @@ class DashboardController extends Controller
                 })
                 ->where('valid','=',true)
                 ->get();
-        $empSalary = [];
+        $empSalary = array();
         foreach($employees as $key=>$employee){
             $currentMonth = DB::table('hb_attendances')
                     ->select(DB::raw('COUNT(hb_attendances.id) AS noOfAttendance'))
@@ -56,5 +56,5 @@ class DashboardController extends Controller
         ];
     
         return response()->json($response);
-    }
+}
 }

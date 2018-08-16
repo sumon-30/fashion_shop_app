@@ -112,7 +112,7 @@ else {
           <header className="head">
             <div className="main-bar col-lg-10">                   
               <h3>
-                <i className="fa fa-calendar menu-icon"></i> Hotel Reservation
+                <i className="fa fa-calendar menu-icon"></i> Employee Attendance System
               </h3>
             </div>
             {this.menuBar()}
