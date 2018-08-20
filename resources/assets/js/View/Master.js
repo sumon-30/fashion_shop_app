@@ -17,8 +17,8 @@ class Master extends Component {
     if("token" in localStorage){
       navMenu.push(<li key="dashboard"><Link to="dashboard"><i className="fa fa fa-dashboard menu-icon"></i><span className="nav-menu">&nbsp;Dashboard</span></Link></li>);
       navMenu.push(<li key="Attendance"><Link to="Attendance"><i className="fa fa-address-book menu-icon"></i><span className="nav-menu">&nbsp;Attendance</span></Link></li>);
-      navMenu.push(<li key="EmployeeType"><Link to="EmployeeType"><i className="glyphicon glyphicon-list-alt menu-icon"></i><span className="nav-menu">&nbsp;Employee Type</span></Link></li>);
       navMenu.push(<li key="employee"><Link to="Employee"><i className="glyphicon glyphicon-bed menu-icon"></i><span className="nav-menu">&nbsp;Employee</span></Link></li>);
+      navMenu.push(<li key="EmployeeType"><Link to="EmployeeType"><i className="glyphicon glyphicon-list-alt menu-icon"></i><span className="nav-menu">&nbsp;Employee Type</span></Link></li>);
       navMenu.push(<li key="user"><Link to="user"><i className="fa fa-users menu-icon"></i><span className="nav-menu">&nbsp;User</span></Link></li>);
       //navMenu.push(<li key="signout"><Link to="signout">Sign Out</Link></li>);
     }

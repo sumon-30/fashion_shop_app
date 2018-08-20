@@ -196,7 +196,7 @@ class Employee extends Component {
       <div className="col-lg-12">
         <div className="box">
             <div className="col-lg-10">
-                <h1 className="text-primary">employee</h1>
+                <h1 className="text-primary">Employee</h1>
             </div>
             <div className="col-lg-1">
                 <button className="btn btn-primary top" style={{ marginTop:'20px'}} onClick={() => this.openModal()}>Add New employee</button>        

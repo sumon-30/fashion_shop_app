@@ -75,12 +75,17 @@ class Attendance extends Component {
         })
         this.selectedCheckboxes = new Set();
       }
-      
-      componentDidMount(){
+      async componentDidMount(){
         document.getElementById("Loading").style.display = "none";
+        const refreshToken = new RefreshToken();
+        await refreshToken.callRefreshToken();
         $this.fetchData();
-        refreshToken = new RefreshToken();
       }
+    //   componentDidMount(){
+    //     document.getElementById("Loading").style.display = "none";
+    //     $this.fetchData();
+    //     refreshToken = new RefreshToken();
+    //   }
       toggleCheckboxChange (id) {
         //const { handleCheckboxChange, label } = this.props;
     
