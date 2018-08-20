@@ -2,7 +2,7 @@
 
 /***** Only for heroku *****/
 $heroku_db_url = parse_url(env('DATABASE_URL'));
-
+print_r($heroku_db_url);
 // $url = parse_url(getenv("DATABASE_URL"));
 // $host = 'ec2-54-83-59-120.compute-1.amazonaws.com';
 // $username = "fqkzqneajfzwql";
