@@ -112,3 +112,8 @@ https://github.com/tymondesigns/jwt-auth/wiki/Installation
                     XLSX.writeFile(wb, "attendance.xlsx")
 https://medium.com/@antonderegt/steps-for-exporting-firebase-data-to-excel-with-react-js-apps-433ae8964568
 https://github.com/SheetJS/js-xlsx/tree/master/demos/react
+
+
+- Checkbox Referece
+http://react.tips/checkboxes-in-react/
+https://stackoverflow.com/questions/44482788/using-a-set-data-structure-in-reacts-state

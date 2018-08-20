@@ -14,7 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/booking', function () {
+Route::get('/Attendance', function () {
     return view('welcome');
 });
 Route::get('/roomtype', function () {

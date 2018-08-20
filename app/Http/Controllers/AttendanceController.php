@@ -200,10 +200,6 @@ class AttendanceController extends Controller
         return response()->json($booking);
     }
     public function setAttendance(Request $request){
-        $employees = DB::table('m_employees')
-                ->select('m_employees.*')
-                ->where('valid','=',true)
-                ->get();
 
         if ($request->month !='') {
             $request_date = $request->year.'-'. $request->month.'-01';
@@ -211,29 +207,64 @@ class AttendanceController extends Controller
             $month= Date('m');
             $request_date = $request->year.'-'. $month.'-01';
         } 
-        
+        Log::debug($request);
+        if(empty($request->selected_id)){
+            Log::debug("empty");
+            $employees = DB::table('m_employees')
+                ->select('m_employees.*')
+                ->where('valid','=',true)
+                ->get();
+            foreach($employees as $employee){
+                $this->EmpDelInsert($employee->id,$request,$request_date);
+            }
+        }else{
+            $employees = $request->selected_id;
+            Log::debug("Not Empty");
+            foreach($employees as $employee){
+                $this->EmpDelInsert($employee,$request,$request_date);
+            }
+        }
 
+        
+        
+        // foreach($employees as $employee){
+        //     DB::table('hb_attendances')
+        //         ->where('emp_id', $employee->id)
+        //         ->whereYear('hb_attendances.attendance_date', '=',$request->year)
+        //         ->whereMonth('hb_attendances.attendance_date', '=',$request->month)
+        //         ->delete();
+        //     for($i = 1; $i <=  $dd; $i++)
+        //     {
+        //         $attendance = new HbAttendance([
+        //             'emp_id' => $employee->id,
+        //             'user_id' => $request->user_id,
+        //             'attendance_date' => $request->year.'-'. $request->month.'-'.$i,
+        //             'attendance_status' => '0',
+        //             ]);
+        //         $booking = $attendance->save();
+        //     }
+        // }
+        return response()->json('true');
+    }
+    public function EmpDelInsert($id,$request,$request_date)
+    {
         $end = new Carbon($request_date);
         $enddate = $end->endOfMonth();
         $dd = substr($enddate,8,2);
-        
-        foreach($employees as $employee){
-            DB::table('hb_attendances')
-                ->where('emp_id', $employee->id)
-                ->whereYear('hb_attendances.attendance_date', '=',$request->year)
-                ->whereMonth('hb_attendances.attendance_date', '=',$request->month)
-                ->delete();
-            for($i = 1; $i <=  $dd; $i++)
-            {
-                $attendance = new HbAttendance([
-                    'emp_id' => $employee->id,
-                    'user_id' => $request->user_id,
-                    'attendance_date' => $request->year.'-'. $request->month.'-'.$i,
-                    'attendance_status' => '0',
-                    ]);
-                $booking = $attendance->save();
-            }
-        }
-        return response()->json('true');
+        DB::table('hb_attendances')
+                    ->where('emp_id', $id)
+                    ->whereYear('hb_attendances.attendance_date', '=',$request->year)
+                    ->whereMonth('hb_attendances.attendance_date', '=',$request->month)
+                    ->delete();
+                for($i = 1; $i <=  $dd; $i++)
+                {
+                    $attendance = new HbAttendance([
+                        'emp_id' => $id,
+                        'user_id' => $request->user_id,
+                        'attendance_date' => $request->year.'-'. $request->month.'-'.$i,
+                        'attendance_status' => '0',
+                        ]);
+                    $booking = $attendance->save();
+                }
     }
 }

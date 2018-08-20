@@ -54,7 +54,8 @@ class Attendance extends Component {
                         , attStatusForUpdate : ''
                         , editButton: ''
                         , noOfBookings:''
-                        ,modalIsOpen: false};
+                        , isChecked : false
+                        , modalIsOpen: false};
         this.openModal = this.openModal.bind(this);
         this.afterOpenModal = this.afterOpenModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -70,14 +71,35 @@ class Attendance extends Component {
             ,searchMonth: new Date().getMonth() +1
             ,pagination: {}
             ,formErrors: {}
+            ,isChecked : false
         })
+        this.selectedCheckboxes = new Set();
       }
+      
       componentDidMount(){
         document.getElementById("Loading").style.display = "none";
         $this.fetchData();
         refreshToken = new RefreshToken();
       }
-
+      toggleCheckboxChange (id) {
+        //const { handleCheckboxChange, label } = this.props;
+    
+        this.setState(({ isChecked }) => (
+          {
+            isChecked: !isChecked,
+          }
+        ));
+        if (this.selectedCheckboxes.has(id)) {
+            this.selectedCheckboxes.delete(id);
+          } else {
+            this.selectedCheckboxes.add(id);
+          }
+          console.log(this.selectedCheckboxes);
+          for (const checkbox of this.selectedCheckboxes) {
+            console.log(checkbox, 'is selected.');
+          }
+       // handleCheckboxChange(label);
+      }
       //to open modal
       openModal() {
         this.setState({modalIsOpen: true});
@@ -135,32 +157,12 @@ class Attendance extends Component {
         }
       }
       openUpdateModal(id,attStatusForUpdate){
-          console.log(id);
+          
         this.setState({modalIsOpen: true
             ,id:id
             ,attStatusForUpdate :attStatusForUpdate });
         
       }
-    //   isDateExpire(date=''){
-    //      if(date == ''){
-    //          date = $this.state.attendanceDate.substring(8,10);
-    //      }
-    //       if($this.state.searchYear < new Date().getFullYear()){
-    //             return true;
-    //       }
-    //       if($this.state.searchYear == new Date().getFullYear()){
-    //           if($this.state.searchMonth < new Date().getMonth() + 1){
-    //             return true;
-    //           }
-    //           if($this.state.searchMonth == new Date().getMonth() + 1){
-    //               if(date <new Date().getDate()){
-    //                   return true;
-    //               }
-    //           }
-    //       }
-    //       return false;
-        
-    //   }
       //to display table row
       tabRow(openModal){
         
@@ -173,14 +175,14 @@ class Attendance extends Component {
                  let childTr = []
                 
                  childTr.push(<td key={'name'+empKey}> {employee.name}</td>);
-                 childTr.push(<td key={'emptype'+empKey}>{employee.emptype_name}<input type="checkbox" name="selectEmpID" value={employee.id} onChange={() => $this.handleOnChangeSelect(employee.id)}/></td>);
+                 childTr.push(<td key={'emptype'+empKey}><i className={employee.emptype_name == "manager"? "fa fa-user-circle-o" : "fa fa-user"}></i><input type="checkbox" id="selectEmpID" className="selectEmpID"  name="selectEmpID" value={employee.id} onChange={() => $this.toggleCheckboxChange(employee.id)}/></td>);
                 if($this.state.dates instanceof Array){
                  $this.state.dates.map(function(date, key){
                      var idDate = date+"_"+employee.id;
                      if(attendances.hasOwnProperty(idDate)){
-                        console.log('hasOwnProperty');
+                       
                         var attendance = attendances[idDate];
-                        console.log(attendance);
+                        
                         if(attendance.attendance_status == "0"){
                             childTr.push(<td className="pointer" id={date} onClick={() => $this.openUpdateModal(attendance.id,0)} key={'btn'+key}>
                                     {roomStatusData[attendance.attendance_status]}
@@ -213,12 +215,6 @@ class Attendance extends Component {
         $this.setState({
           [e.target.name]: e.target.value
         })
-      }
-      handleOnChangeSelect(id){
-        $this.setState({
-            selectEmpID:  [...$this.state.selectEmpID, id]
-          })
-          console.log($this.state.selectEmpID);
       }
 
       createSubmit(event) {
@@ -262,11 +258,12 @@ class Attendance extends Component {
       fetchData(page =1){
         axios.get(config.baseurl+"attendances?page="+page+"&year="+$this.state.searchYear+"&month="+$this.state.searchMonth+"&perPages="+$this.state.perPages)
         .then(response => {
-           
+           $this.setState ({isChecked: false});
             $this.setState({ dates: response.data.dates });
             $this.setState({ employees: response.data.employees.data });
             $this.setState({ attendances: response.data.attendances });
             $this.setState({ pagination: response.data.pagination });
+            $this.setState({ dates: response.data.dates });
         
         })
         .catch(function (error) {
@@ -277,16 +274,25 @@ class Attendance extends Component {
         })
       }
       setPresent(){
+        console.log('set present');
+        console.log(this.selectedCheckboxes);
+        let selectedIDs = [...this.selectedCheckboxes];
+       
         const attendance = {
             year: $this.state.searchYear
             ,month: $this.state.searchMonth
             ,user_id : localStorage.getItem('loginUserId')
+            ,selected_id : selectedIDs
           }
           document.getElementById("Loading").style.display = "block";
           document.getElementById("presBtn").disabled = true;
           let uri = config.baseurl+'setAttendance';
-          axios.post(uri, attendance).then((response) => {
+           axios.post(uri, attendance).then((response) => {
+            document.getElementById("presBtn").disabled = false;
+            //document.getElementById("selectEmpID").checked = false;
+            $('.selectEmpID').prop('checked',false);
             document.getElementById("Loading").style.display = "none";
+            this.selectedCheckboxes = new Set();
             $this.fetchData();
         
         })
@@ -367,6 +373,9 @@ class Attendance extends Component {
                         </div>  
                         <div className="row">
                             <div className="col-sm-12">
+                                <div id="Loading">
+                                    <center><h3><li className="fa fa-spinner">Loading ....</li></h3></center>
+                                </div>
                                 <div className=" table-responsive">
                                     <table id="dataTable" className="table table-bordered table-condensed table-hover table-striped">
                                         <thead>
@@ -381,9 +390,7 @@ class Attendance extends Component {
                                     </table>
                                     
                                 </div>
-                                <div id="Loading">
-                                    <center>Loading ....</center>
-                                </div>
+                                
                             </div>
                         </div>
                         
@@ -443,7 +450,12 @@ class ModalForm extends Component{
         for(let empKey=0 ; empKey<attendanceStatus.length; empKey++){
                 roomStatusInput.push(<div key={empKey} className="radio">
                                       <label key="empKey"> 
-                                      <input type="radio" name="attStatusForUpdate" key={empKey} value={empKey} onChange={this.props.handleOnChange} checked={this.props.params.attStatusForUpdate == empKey}/>
+                                      <input type="radio" 
+                                      name="attStatusForUpdate" 
+                                      key={empKey} 
+                                      value={empKey} 
+                                      onChange={this.props.handleOnChange} 
+                                      checked={this.props.params.attStatusForUpdate == empKey}/>
                                         {attendanceStatus[empKey]}
                                       </label>
                                       </div>); 
