@@ -2,8 +2,6 @@
 
 /***** Only for heroku *****/
 $heroku_db_url = parse_url(env('DATABASE_URL'));
-print_r($heroku_db_url);
-print_r( env('DB_CONNECTION', 'mysql'));
 // $url = parse_url(getenv("DATABASE_URL"));
 // $host = 'ec2-54-83-59-120.compute-1.amazonaws.com';
 // $username = "fqkzqneajfzwql";
@@ -33,7 +31,7 @@ return [
     |
     */
 
-    'default' => 'pgsql',
+    'default' =>'pgsql',
 
     /*
     |--------------------------------------------------------------------------
@@ -59,20 +57,20 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'fashion_shop'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
-        ],
+        // 'mysql' => [
+        //     'driver' => 'mysql',
+        //     'host' => env('DB_HOST', '127.0.0.1'),
+        //     'port' => env('DB_PORT', '3306'),
+        //     'database' => env('DB_DATABASE', 'fashion_shop'),
+        //     'username' => env('DB_USERNAME', 'root'),
+        //     'password' => env('DB_PASSWORD', ''),
+        //     'unix_socket' => env('DB_SOCKET', ''),
+        //     'charset' => 'utf8mb4',
+        //     'collation' => 'utf8mb4_unicode_ci',
+        //     'prefix' => '',
+        //     'strict' => true,
+        //     'engine' => null,
+        // ],
 
         // 'pgsql' => [
         //     'driver' => 'pgsql',
