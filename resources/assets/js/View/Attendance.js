@@ -404,7 +404,11 @@ class Attendance extends Component {
                             onPageChange={this.fetchData}
                             onChangePagi={this.onChangePagi}
                         />  
-                       
+                       <div>
+                        <label>L : Leave</label><br/>
+                        <label>Full : No Leave</label><br/>
+                        <label>Half : Half Day Leave</label>
+                        </div>
                     </div>
                 
                 </div>             

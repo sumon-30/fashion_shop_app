@@ -150,7 +150,7 @@ else {
       </div>
       {/* footer div */}
         <div id="footerdiv">
-          <p>2018 &copy; Hotel Reservation</p>
+          <p>2018 &copy; Employee Attendance</p>
         </div>
       {/* footer div */}
     </div>
