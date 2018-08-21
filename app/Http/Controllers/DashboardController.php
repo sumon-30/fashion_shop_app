@@ -30,13 +30,14 @@ class DashboardController extends Controller
         $empSalary = array();
         foreach($employees as $key=>$employee){
             $currentMonth = DB::table('hb_attendances')
-                    ->select(DB::raw('COUNT(hb_attendances.id) AS noOfAttendance'))
+                    ->select(DB::raw('count(*) AS noOfAttendance'))
                     ->where('hb_attendances.valid', '=',true)
                     ->where('hb_attendances.emp_id', '=',$employee->id)
                     ->whereYear('hb_attendances.attendance_date', '=',$year)
                     ->whereMonth('hb_attendances.attendance_date', '=',$month)
                     ->get();
             $noOfDays = 31;
+            Log::debug($currentMonth);
             $takeLeave = $noOfDays - $currentMonth[0]->noOfAttendance;
             
             $actualLeave = 0;
