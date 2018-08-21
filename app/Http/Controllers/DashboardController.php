@@ -37,8 +37,9 @@ class DashboardController extends Controller
                     ->whereMonth('hb_attendances.attendance_date', '=',$month)
                     ->get();
             $noOfDays = 31;
-            Log::debug($currentMonth);
-            $takeLeave = $noOfDays - $currentMonth[0]->noOfAttendance;
+            $takeLeave = 31;
+            //Log::debug($currentMonth);
+            //$takeLeave = $noOfDays - $currentMonth[0]->noOfAttendance;
             
             $actualLeave = 0;
             if($takeLeave > $employee->leave_day){
@@ -53,7 +54,8 @@ class DashboardController extends Controller
         }
         $response = [
             'employees' => $employees,
-            'empSalary' => $empSalary
+            'empSalary' => $empSalary,
+            'currentMonth' => $currentMonth
         ];
     
         return response()->json($response);
